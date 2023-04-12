@@ -104,7 +104,9 @@ const NFTDescription = ({ nft }) => {
   };
 
   //SMART CONTRACT DATA
-  const { buyNFT, currentAccount } = useContext(NFTMarketplaceContext);
+  const { buyNFT, currentAccount, newContract, withdraw } = useContext(
+    NFTMarketplaceContext
+  );
 
   return (
     <div className={Style.NFTDescription}>
@@ -261,7 +263,15 @@ const NFTDescription = ({ nft }) => {
 
             <div className={Style.NFTDescription_box_profile_biding_box_button}>
               {currentAccount == nft.seller.toLowerCase() ? (
-                <p>You can't buy your own NFT</p>
+                <div>
+                  <Button
+                    icon={<FaWallet />}
+                    btnName="Accepttt NFT"
+                    handleClick={() => withdraw(nft)}
+                    classStyle={Style.button}
+                  />
+                  <p>You can't buy your own NFT</p>
+                </div>
               ) : currentAccount == nft.owner.toLowerCase() ? (
                 <Button
                   icon={<FaWallet />}
@@ -274,12 +284,26 @@ const NFTDescription = ({ nft }) => {
                   classStyle={Style.button}
                 />
               ) : (
-                <Button
-                  icon={<FaWallet />}
-                  btnName="Buy NFT"
-                  handleClick={() => buyNFT(nft)}
-                  classStyle={Style.button}
-                />
+                <div>
+                  <Button
+                    icon={<FaWallet />}
+                    btnName="Buy NFT"
+                    handleClick={() => buyNFT(nft)}
+                    classStyle={Style.button}
+                  />
+                  <Button
+                    icon={<FaWallet />}
+                    btnName="Zappppp NFT"
+                    handleClick={() => newContract(nft)}
+                    classStyle={Style.button}
+                  />
+                  <Button
+                    icon={<FaWallet />}
+                    btnName="Accepttt NFT"
+                    handleClick={() => withdraw(nft)}
+                    classStyle={Style.button}
+                  />
+                </div>
               )}
 
               <Button

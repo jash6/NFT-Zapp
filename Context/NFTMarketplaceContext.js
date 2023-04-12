@@ -299,6 +299,40 @@ export const NFTMarketplaceProvider = ({ children }) => {
     }
   };
 
+  //SWAP NFTs Function
+  const newContract = async (nft) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
+      const transaction = await contract.newContract(
+        nft.seller,
+        "password",
+        2,
+        nft.tokenId
+      );
+      console.log("===========");
+      await transaction.wait();
+      router.push("/author");
+    } catch (error) {
+      setError("Error While sending swap request");
+      console.log(error);
+      setOpenError(true);
+    }
+  };
+
+  const withdraw = async (nft) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.withdraw(2, nft.tokenId);
+      await transaction.wait();
+      router.push("/author");
+    } catch (error) {
+      setError("Error While sending swap request");
+      console.log(error);
+      setOpenError(true);
+    }
+  };
+
   //------------------------------------------------------------------
 
   //----TRANSFER FUNDS
@@ -406,6 +440,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
         fetchMyNFTsOrListedNFTs,
         buyNFT,
         createSale,
+
+        withdraw,
+        newContract,
         currentAccount,
         titleData,
         setOpenError,
