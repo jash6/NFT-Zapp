@@ -184,14 +184,18 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   const fetchNFTs = async () => {
     try {
-      const provider = new ethers.providers.JsonRpcProvider(
-        //--process.env.NEXT_PUBLIC_POLYGON_MUMBAI_RPC
-        "https://polygon-mumbai.g.alchemy.com/v2/7VEYAVuUy-92jDmndsW9W6R29uQ_bhZf"
-      );
+      // const provider = new ethers.providers.JsonRpcProvider(
+      //   //--process.env.NEXT_PUBLIC_POLYGON_MUMBAI_RPC
+      //   "https://polygon-mumbai.g.alchemy.com/v2/7VEYAVuUy-92jDmndsW9W6R29uQ_bhZf"
+      // );
 
+      const web3Modal = new Web3Modal();
+      const connection = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(connection);
       const contract = fetchContract(provider);
 
       const data = await contract.fetchMarketItems();
+      console.log(data, "context api");
 
       const items = await Promise.all(
         data.map(
@@ -219,6 +223,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           }
         )
       );
+      console.log(items, "final return response");
       return items;
 
       // }
@@ -292,6 +297,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       });
 
       await transaction.wait();
+      console.log(transaction);
       router.push("/author");
     } catch (error) {
       setError("Error While buying NFT");
@@ -302,6 +308,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
   //SWAP NFTs Function
   const newContract = async (nft) => {
     try {
+      console.log(nft);
       const contract = await connectingWithSmartContract();
       const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
       const transaction = await contract.newContract(
@@ -312,6 +319,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
       );
       console.log("===========");
       await transaction.wait();
+      console.log(transaction);
       router.push("/author");
     } catch (error) {
       setError("Error While sending swap request");
@@ -322,9 +330,11 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
   const withdraw = async (nft) => {
     try {
+      console.log(nft);
       const contract = await connectingWithSmartContract();
       const transaction = await contract.withdraw(2, nft.tokenId);
       await transaction.wait();
+      console.log(transaction);
       router.push("/author");
     } catch (error) {
       setError("Error While sending swap request");

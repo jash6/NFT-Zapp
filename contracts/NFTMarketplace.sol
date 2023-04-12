@@ -166,6 +166,7 @@ contract NFTMarketplace is ERC721URIStorage {
         idToMarketItem[tokenId].seller = payable(address(0));
         _itemsSold.increment();
         _transfer(address(this), msg.sender, tokenId);
+        approve(address(this), tokenId);
         payable(owner).transfer(listingPrice);
         payable(idToMarketItem[tokenId].seller).transfer(msg.value);
     }
@@ -178,7 +179,7 @@ contract NFTMarketplace is ERC721URIStorage {
 
         MarketItem[] memory items = new MarketItem[](unsoldItemCount);
         for (uint256 i = 0; i < itemCount; i++) {
-            if (idToMarketItem[i + 1].owner == address(this) && !idToMarketItem[i + 1].isSwap) {
+            if (idToMarketItem[i + 1].owner == address(this) && !idToMarketItem[i + 1].sold) {
                 uint256 currentId = i + 1;
                 MarketItem storage currentItem = idToMarketItem[currentId];
                 items[currentIndex] = currentItem;
@@ -372,6 +373,10 @@ contract NFTMarketplace is ERC721URIStorage {
     //    }
         // This contract becomes the temporary owner of the token
         _transfer(msg.sender, address(this), _tokenId);
+        // idToMarketItem[_tokenId].owner = payable(address(this));
+        // idToMarketItem[_tokenId].seller = payable(msg.sender);
+        // idToMarketItem[_tokenId].sold = true;
+        console.log(_contractId);
         contracts[contractId] = LockContract(
             msg.sender,
             _receiver,
@@ -416,14 +421,21 @@ contract NFTMarketplace is ERC721URIStorage {
             }
         }
         LockContract storage c = contracts[_contractId];
+        console.log(idToMarketItem[_requestedid].owner);
+        console.log(idToMarketItem[_requestedid].seller);
+        console.log(idToMarketItem[_requestedid].sold);
         // if(validateaddress(c.tokenContract)!=true){
         //    require(msg.value>=ExchangeFees);
         // }
-        _transfer(address(this), c.Sender, _requestedid);
-        _transfer(address(this), msg.sender, _tokenId);
-        approve(address(this), _tokenId);
         idToMarketItem[_tokenId].owner = payable(msg.sender);
         idToMarketItem[_requestedid].owner = payable(c.Sender);
+        idToMarketItem[_requestedid].seller = payable(address(0));
+        idToMarketItem[_requestedid].sold = true;
+        // idToMarketItem[_requestedid].seller = payable(address(0));
+        // _transfer(address(this), c.Sender, _requestedid);
+        _transfer(address(this), msg.sender, _requestedid);
+        _transfer(msg.sender, c.Sender, _requestedid);
+        _transfer(address(this), msg.sender, _tokenId);
         c.withdrawn = true;
         emit HTLCERC721Withdraw(contractId);
         return true;

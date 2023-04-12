@@ -39,9 +39,12 @@ const Home = () => {
   useEffect(() => {
     // if (currentAccount) {
     fetchNFTs().then((items) => {
-      console.log(nfts);
-      setNfts(items.reverse());
-      setNftsCopy(items);
+      if (items) {
+        console.log(items, "inside if");
+        setNfts(items.reverse());
+        setNftsCopy(items);
+      }
+      console.log(items, "outside if");
     });
     // }
   }, []);

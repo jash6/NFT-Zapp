@@ -23,9 +23,10 @@ const searchPage = () => {
     try {
       // if (currentAccount) {
       fetchNFTs().then((items) => {
-        setNfts(items.reverse());
-        setNftsCopy(items);
-        console.log(nfts);
+        if (items) {
+          setNfts(items.reverse());
+          setNftsCopy(items);
+        }
       });
       // }
     } catch (error) {

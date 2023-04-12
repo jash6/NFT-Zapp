@@ -123,7 +123,7 @@ const NFTDescription = ({ nft }) => {
             {social && (
               <div className={Style.NFTDescription_box_share_box_social}>
                 <a href="#">
-                  <TiSocialFacebook /> Facebooke
+                  <TiSocialFacebook /> Facebook
                 </a>
                 <a href="#">
                   <TiSocialInstagram /> Instragram
@@ -299,7 +299,7 @@ const NFTDescription = ({ nft }) => {
                   />
                   <Button
                     icon={<FaWallet />}
-                    btnName="Accepttt NFT"
+                    btnName="Accept NFT"
                     handleClick={() => withdraw(nft)}
                     classStyle={Style.button}
                   />
