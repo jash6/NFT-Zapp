@@ -39,6 +39,7 @@ const Home = () => {
   useEffect(() => {
     // if (currentAccount) {
     fetchNFTs().then((items) => {
+      console.log(items, "indeeeeeeex");
       if (items) {
         console.log(items, "inside if");
         setNfts(items.reverse());

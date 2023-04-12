@@ -196,12 +196,19 @@ export const NFTMarketplaceProvider = ({ children }) => {
 
       const data = await contract.fetchMarketItems();
       console.log(data, "context api");
-
+      let data1 = [];
+      // console.log(typeof data[2][1]);
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].owner != "0x0000000000000000000000000000000000000000") {
+          data1.push(data[i]);
+        }
+      }
+      console.log(data1, "New Data");
       const items = await Promise.all(
-        data.map(
+        data1.map(
           async ({ tokenId, seller, owner, price: unformattedPrice }) => {
             const tokenURI = await contract.tokenURI(tokenId);
-
+            console.log();
             const {
               data: { image, name, description },
             } = await axios.get(tokenURI, {});
