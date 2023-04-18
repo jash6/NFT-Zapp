@@ -297,12 +297,12 @@ const NFTDescription = ({ nft }) => {
                     handleClick={() => newContract(nft)}
                     classStyle={Style.button}
                   />
-                  <Button
+                  {/* <Button
                     icon={<FaWallet />}
                     btnName="Accept NFT"
                     handleClick={() => withdraw(nft)}
                     classStyle={Style.button}
-                  />
+                  /> */}
                 </div>
               )}
 

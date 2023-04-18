@@ -57,7 +57,7 @@ const connectingWithSmartContract = async () => {
 export const NFTMarketplaceContext = React.createContext();
 
 export const NFTMarketplaceProvider = ({ children }) => {
-  const titleData = "BUY❌ SELL❌ ZAP✅";
+  const titleData = "BUY✅ SELL✅ ZAP✅";
 
   //------USESTAT
   const [error, setError] = useState("");

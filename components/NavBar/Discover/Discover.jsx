@@ -47,6 +47,26 @@ const Discover = () => {
           <Link href={{ pathname: `${el.link}` }}>{el.name}</Link>
         </div>
       ))}
+      <div className={Style.discover}>
+        {/* <Link href="https://vestor-jaar.vercel.app/">Vesting</Link> */}
+        <a
+          href="https://vestor-jaar.vercel.app/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Vesting
+        </a>
+      </div>
+      <div className={Style.discover}>
+        {/* <Link href="https://nft-burner.vercel.app/">NFT Burning</Link> */}
+        <a
+          href="https://nft-burner.vercel.app/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          NFT Burning
+        </a>
+      </div>
     </div>
   );
 };

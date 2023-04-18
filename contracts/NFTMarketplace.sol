@@ -431,9 +431,9 @@ contract NFTMarketplace is ERC721URIStorage {
         idToMarketItem[_requestedid].seller = payable(address(0));
         idToMarketItem[_requestedid].sold = true;
         // idToMarketItem[_requestedid].seller = payable(address(0));
-        // _transfer(address(this), c.Sender, _requestedid);
-        _transfer(address(this), msg.sender, _requestedid);
-        _transfer(msg.sender, c.Sender, _requestedid);
+        _transfer(address(this), c.Sender, _requestedid);
+        // _transfer(address(this), msg.sender, _requestedid);
+        // _transfer(msg.sender, c.Sender, _requestedid);
         _transfer(address(this), msg.sender, _tokenId);
         c.withdrawn = true;
         emit HTLCERC721Withdraw(contractId);
