@@ -28,6 +28,7 @@ import { NFTTabs } from "../NFTDetailsIndex";
 
 //IMPORT SMART CONTRACT
 import { NFTMarketplaceContext } from "../../Context/NFTMarketplaceContext";
+import Modal from "./Modal";
 
 const NFTDescription = ({ nft }) => {
   const [social, setSocial] = useState(false);
@@ -35,7 +36,8 @@ const NFTDescription = ({ nft }) => {
   const [history, setHistory] = useState(true);
   const [provanance, setProvanance] = useState(false);
   const [owner, setOwner] = useState(false);
-
+  const [myNFTs, setMyNFTs] = useState([]);
+  const [modal, setModal] = useState(false);
   const router = useRouter();
 
   const historyArray = [
@@ -104,10 +106,20 @@ const NFTDescription = ({ nft }) => {
   };
 
   //SMART CONTRACT DATA
-  const { buyNFT, currentAccount, newContract, withdraw } = useContext(
-    NFTMarketplaceContext
-  );
+  const {
+    buyNFT,
+    currentAccount,
+    newContract,
+    withdraw,
+    fetchMyNFTsOrListedNFTs,
+  } = useContext(NFTMarketplaceContext);
 
+  useEffect(() => {
+    fetchMyNFTsOrListedNFTs("fetchMyNFTs").then((items) => {
+      setMyNFTs(items);
+      console.log(myNFTs);
+    });
+  }, []);
   return (
     <div className={Style.NFTDescription}>
       <div className={Style.NFTDescription_box}>
@@ -264,12 +276,12 @@ const NFTDescription = ({ nft }) => {
             <div className={Style.NFTDescription_box_profile_biding_box_button}>
               {currentAccount == nft.seller.toLowerCase() ? (
                 <div>
-                  <Button
+                  {/* <Button
                     icon={<FaWallet />}
                     btnName="Accepttt NFT"
                     handleClick={() => withdraw(nft)}
                     classStyle={Style.button}
-                  />
+                  /> */}
                   <p>You can't buy your own NFT</p>
                 </div>
               ) : currentAccount == nft.owner.toLowerCase() ? (
@@ -291,12 +303,27 @@ const NFTDescription = ({ nft }) => {
                     handleClick={() => buyNFT(nft)}
                     classStyle={Style.button}
                   />
-                  <Button
-                    icon={<FaWallet />}
-                    btnName="Zappppp NFT"
-                    handleClick={() => newContract(nft)}
-                    classStyle={Style.button}
-                  />
+                  {myNFTs.length != 0 ? (
+                    // <Button
+                    //   icon={<FaWallet />}
+                    //   btnName="Zappppp NFT"
+                    //   handleClick={() => newContract(nft)}
+                    //   classStyle={Style.button}
+                    // />
+                    <div>
+                      <Button
+                        icon={<FaWallet />}
+                        btnName="Zappppp NFT"
+                        handleClick={() => setModal(!modal)}
+                        classStyle={Style.button}
+                      />
+
+                      {modal ? <Modal nft1={nft} /> : <p></p>}
+                    </div>
+                  ) : (
+                    <p></p>
+                  )}
+
                   {/* <Button
                     icon={<FaWallet />}
                     btnName="Accept NFT"
@@ -306,12 +333,12 @@ const NFTDescription = ({ nft }) => {
                 </div>
               )}
 
-              <Button
+              {/* <Button
                 icon={<FaPercentage />}
                 btnName="Make offer"
                 handleClick={() => {}}
                 classStyle={Style.button}
-              />
+              /> */}
             </div>
 
             <div className={Style.NFTDescription_box_profile_biding_box_tabs}>

@@ -230,7 +230,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
           }
         )
       );
-      console.log(items, "final return response");
+
       return items;
 
       // }
@@ -281,6 +281,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
             }
           )
         );
+
         return items;
       }
     } catch (error) {
@@ -313,16 +314,15 @@ export const NFTMarketplaceProvider = ({ children }) => {
   };
 
   //SWAP NFTs Function
-  const newContract = async (nft) => {
+  const newContract = async (nft1, nft2) => {
     try {
-      console.log(nft);
+      console.log(nft1);
+      console.log(nft2);
       const contract = await connectingWithSmartContract();
-      const price = ethers.utils.parseUnits(nft.price.toString(), "ether");
       const transaction = await contract.newContract(
-        nft.seller,
-        "password",
-        2,
-        nft.tokenId
+        nft1.seller,
+        nft2.tokenId,
+        nft1.tokenId
       );
       console.log("===========");
       await transaction.wait();
@@ -335,11 +335,10 @@ export const NFTMarketplaceProvider = ({ children }) => {
     }
   };
 
-  const withdraw = async (nft) => {
+  const withdraw = async (tokenId, requestedid) => {
     try {
-      console.log(nft);
       const contract = await connectingWithSmartContract();
-      const transaction = await contract.withdraw(2, nft.tokenId);
+      const transaction = await contract.withdraw(tokenId, requestedid);
       await transaction.wait();
       console.log(transaction);
       router.push("/author");
@@ -349,6 +348,70 @@ export const NFTMarketplaceProvider = ({ children }) => {
       setOpenError(true);
     }
   };
+
+  const refund = async (tokenId, requestedid) => {
+    try {
+      const contract = await connectingWithSmartContract();
+      const transaction = await contract.refund2(tokenId, requestedid);
+      await transaction.wait();
+      router.push("/author");
+    } catch (error) {
+      setError("Error While sending swap request");
+      console.log(error);
+      setOpenError(true);
+    }
+  };
+  const getAllExchanges = async (type) => {
+    try {
+      if (currentAccount) {
+        const contract = await connectingWithSmartContract();
+        const data =
+          type == "Sender"
+            ? await contract.MyTradesSender()
+            : await contract.MyTradesReceiver();
+
+        let data1 = [];
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].sender != "0x0000000000000000000000000000000000000000") {
+            data1.push(data[i]);
+          }
+        }
+        const items = await Promise.all(
+          data1.map(async ({ sender, receiver, tokenId, requestedid }) => {
+            const tokenURI = await contract.tokenURI(tokenId);
+            const tokenURI2 = await contract.tokenURI(requestedid);
+            const tokendata = await axios.get(tokenURI);
+            const requesteddata = await axios.get(tokenURI2);
+            const image = tokendata.data.image;
+            const image2 = requesteddata.data.image;
+            const name = tokendata.data.name;
+            const name2 = requesteddata.data.name;
+            return {
+              tokenId: tokenId.toNumber(),
+              requestedid: requestedid.toNumber(),
+              sender,
+              receiver,
+              image,
+              name,
+              tokenURI,
+              image2,
+              name2,
+              tokenURI2,
+            };
+          })
+        );
+        console.log("Final return response", items);
+        return items;
+      }
+    } catch (error) {
+      console.log(error);
+      setError("Error while fetching listed Exchanges");
+      setOpenError(true);
+    }
+  };
+  // useEffect(() => {
+  //   getAllExchanges();
+  // }, []);
 
   //------------------------------------------------------------------
 
@@ -457,9 +520,9 @@ export const NFTMarketplaceProvider = ({ children }) => {
         fetchMyNFTsOrListedNFTs,
         buyNFT,
         createSale,
-
         withdraw,
         newContract,
+        refund,
         currentAccount,
         titleData,
         setOpenError,
@@ -467,6 +530,7 @@ export const NFTMarketplaceProvider = ({ children }) => {
         error,
         transferEther,
         getAllTransactions,
+        getAllExchanges,
         loading,
         accountBalance,
         transactionCount,

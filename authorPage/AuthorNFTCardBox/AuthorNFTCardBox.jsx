@@ -3,45 +3,23 @@ import React, { useState } from "react";
 //INTERNAL IMPORT
 import Style from "./AuthorNFTCardBox.module.css";
 import images from "../../img";
-import { NFTCardTwo } from "../../collectionPage/collectionIndex";
+import { NFTCardTwo, Dashboard } from "../../collectionPage/collectionIndex";
 import FollowerTabCard from "../../components/FollowerTab/FollowerTabCard/FollowerTabCard";
 import { Loader } from "../../components/componentsindex";
 
 const AuthorNFTCardBox = ({
   collectiables,
   created,
+  senderdashboard,
+  receiverdashboard,
   like,
   follower,
   following,
   nfts,
   myNFTS,
+  senderexchanges,
+  receiverexchanges,
 }) => {
-  // const collectiablesArray = [
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  //   images.nft_image_3,
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  //   images.nft_image_3,
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  // ];
-
-  // const createdArray = [
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  //   images.nft_image_3,
-  //   images.nft_image_1,
-  // ];
-
-  // const likeArray = [
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  //   images.nft_image_3,
-  //   images.nft_image_1,
-  //   images.nft_image_2,
-  // ];
-
   const followerArray = [
     {
       background: images.creatorbackground1,
@@ -108,6 +86,10 @@ const AuthorNFTCardBox = ({
       {collectiables && <NFTCardTwo NFTData={nfts} />}
       {created && <NFTCardTwo NFTData={myNFTS} />}
       {like && <NFTCardTwo NFTData={nfts} />}
+      {senderdashboard && <Dashboard NFTData={senderexchanges} type="Sender" />}
+      {receiverdashboard && (
+        <Dashboard NFTData={receiverexchanges} type="Receiver" />
+      )}
       {follower && (
         <div className={Style.AuthorNFTCardBox_box}>
           {followerArray.map((el, i) => (

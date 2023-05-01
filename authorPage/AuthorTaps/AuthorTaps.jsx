@@ -11,6 +11,8 @@ const AuthorTaps = ({
   setLike,
   setFollower,
   setFollowing,
+  setSenderDashboard,
+  setReceiverDashboard,
   currentAccount,
 }) => {
   const [openList, setOpenList] = useState(false);
@@ -41,6 +43,8 @@ const AuthorTaps = ({
       setFollower(false);
       setFollowing(false);
       setLike(false);
+      setSenderDashboard(false);
+      setReceiverDashboard(false);
       setActiveBtn(1);
     } else if (btnText == "Own NFT") {
       setCollectiables(false);
@@ -48,6 +52,8 @@ const AuthorTaps = ({
       setFollower(false);
       setFollowing(false);
       setLike(false);
+      setSenderDashboard(false);
+      setReceiverDashboard(false);
       setActiveBtn(2);
     } else if (btnText == "Liked") {
       setCollectiables(false);
@@ -55,6 +61,8 @@ const AuthorTaps = ({
       setFollower(false);
       setFollowing(false);
       setLike(true);
+      setSenderDashboard(false);
+      setReceiverDashboard(false);
       setActiveBtn(3);
     } else if (btnText == "Following") {
       setCollectiables(false);
@@ -62,6 +70,8 @@ const AuthorTaps = ({
       setFollower(false);
       setFollowing(true);
       setLike(false);
+      setSenderDashboard(false);
+      setReceiverDashboard(false);
       setActiveBtn(4);
     } else if (btnText == "Followers") {
       setCollectiables(false);
@@ -69,7 +79,27 @@ const AuthorTaps = ({
       setFollower(true);
       setFollowing(false);
       setLike(false);
+      setSenderDashboard(false);
+      setReceiverDashboard(false);
       setActiveBtn(5);
+    } else if (btnText == "Zapp Requests Sent") {
+      setCollectiables(false);
+      setCreated(false);
+      setFollower(false);
+      setFollowing(false);
+      setLike(false);
+      setSenderDashboard(true);
+      setReceiverDashboard(false);
+      setActiveBtn(6);
+    } else if (btnText == "Zapp Requests Received") {
+      setCollectiables(false);
+      setCreated(false);
+      setFollower(false);
+      setFollowing(false);
+      setLike(false);
+      setSenderDashboard(false);
+      setReceiverDashboard(true);
+      setActiveBtn(7);
     }
   };
 
@@ -89,6 +119,18 @@ const AuthorTaps = ({
               onClick={(e) => openTab(e)}
             >
               Own NFT
+            </button>
+            <button
+              className={`${activeBtn == 6 ? Style.active : ""}`}
+              onClick={(e) => openTab(e)}
+            >
+              Zapp Requests Sent
+            </button>
+            <button
+              className={`${activeBtn == 7 ? Style.active : ""}`}
+              onClick={(e) => openTab(e)}
+            >
+              Zapp Requests Received
             </button>
             <button
               className={`${activeBtn == 3 ? Style.active : ""}`}

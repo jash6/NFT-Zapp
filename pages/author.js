@@ -51,30 +51,35 @@ const author = () => {
 
   const [collectiables, setCollectiables] = useState(true);
   const [created, setCreated] = useState(false);
+  const [senderdashboard, setSenderDashboard] = useState(false);
+  const [receiverdashboard, setReceiverDashboard] = useState(false);
   const [like, setLike] = useState(false);
   const [follower, setFollower] = useState(false);
   const [following, setFollowing] = useState(false);
 
   //IMPORT SMART CONTRACT DATA
-  const { fetchMyNFTsOrListedNFTs, currentAccount } = useContext(
-    NFTMarketplaceContext
-  );
+  const { fetchMyNFTsOrListedNFTs, currentAccount, getAllExchanges } =
+    useContext(NFTMarketplaceContext);
 
   const [nfts, setNfts] = useState([]);
   const [myNFTs, setMyNFTs] = useState([]);
+  const [senderexchanges, setSenderExchanges] = useState([]);
+  const [receiverexchanges, setReceiverExchanges] = useState([]);
 
   useEffect(() => {
     fetchMyNFTsOrListedNFTs("fetchItemsListed").then((items) => {
       setNfts(items);
-
-      console.log(nfts);
     });
-  }, []);
-
-  useEffect(() => {
     fetchMyNFTsOrListedNFTs("fetchMyNFTs").then((items) => {
       setMyNFTs(items);
-      console.log(myNFTs);
+    });
+    getAllExchanges("Sender").then((items) => {
+      console.log("Senderrr", items);
+      setSenderExchanges(items);
+    });
+    getAllExchanges("Receiver").then((items) => {
+      console.log("Receiverrr", items);
+      setReceiverExchanges(items);
     });
   }, []);
 
@@ -88,17 +93,22 @@ const author = () => {
         setLike={setLike}
         setFollower={setFollower}
         setFollowing={setFollowing}
+        setSenderDashboard={setSenderDashboard}
+        setReceiverDashboard={setReceiverDashboard}
         currentAccount={currentAccount}
       />
-
       <AuthorNFTCardBox
         collectiables={collectiables}
         created={created}
+        senderdashboard={senderdashboard}
+        receiverdashboard={receiverdashboard}
         like={like}
         follower={follower}
         following={following}
         nfts={nfts}
         myNFTS={myNFTs}
+        senderexchanges={senderexchanges}
+        receiverexchanges={receiverexchanges}
       />
       <Title
         heading="Popular Creators"
